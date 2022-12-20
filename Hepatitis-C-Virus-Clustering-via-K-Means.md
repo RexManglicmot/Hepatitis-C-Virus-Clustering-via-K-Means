@@ -1,4 +1,4 @@
-Hepatitis C Virus K-Means Clustering
+Hepatitis C Virus Clustering via K-Means
 ================
 Rex Manglicmot
 
@@ -183,7 +183,7 @@ ggplot(gather(data, cols, value), aes(x = value, fill=cols)) +
   scale_fill_brewer(palette="Paired")
 ```
 
-![](Hepatitis-C-Virus-K-Means-Clustering_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](Hepatitis-C-Virus-Clustering-via-K-Means_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
 ``` r
 ggplot(gather(data, cols, value), aes(x = value, fill=cols)) + 
@@ -193,7 +193,7 @@ ggplot(gather(data, cols, value), aes(x = value, fill=cols)) +
   scale_fill_brewer(palette="Paired") 
 ```
 
-![](Hepatitis-C-Virus-K-Means-Clustering_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](Hepatitis-C-Virus-Clustering-via-K-Means_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
 ``` r
 ggplot(gather(data, cols, value), aes(x = value, fill=cols)) + 
@@ -203,7 +203,7 @@ ggplot(gather(data, cols, value), aes(x = value, fill=cols)) +
   scale_fill_brewer(palette="Paired") 
 ```
 
-![](Hepatitis-C-Virus-K-Means-Clustering_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+![](Hepatitis-C-Virus-Clustering-via-K-Means_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
 ## K-Means
 

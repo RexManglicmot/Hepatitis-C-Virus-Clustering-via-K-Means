@@ -1,5 +1,5 @@
 ---
-title: "Hepatitis C Virus K-Means Clustering"
+title: "Hepatitis C Virus Clustering via K-Means"
 author: "Rex Manglicmot"
 output: 
   github_document: 
