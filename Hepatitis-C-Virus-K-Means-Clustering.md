@@ -51,6 +51,7 @@ data are the attributes 5-14.
 
 ``` r
 library(tidyverse)
+library(ggthemes)
 ```
 
 ## Loading the Data
@@ -143,8 +144,12 @@ data <- data %>%
   drop_na()
 ```
 
+Let’s Explore
+
+## Exploratory Data Analysis
+
 ``` r
-#check data for any NA's or characters
+#show summary statistics of data
 summary(data)
 ```
 
@@ -171,46 +176,34 @@ summary(data)
     ##  Max.   :1079.10   Max.   :650.9   Max.   :86.50
 
 ``` r
-#check the class. We need quant variables
-lapply(data,class)
+ggplot(gather(data, cols, value), aes(x = value, fill=cols)) + 
+       geom_histogram(binwidth = 1) + 
+  facet_wrap(.~cols, scales = 'free') + 
+  theme_calc() +
+  scale_fill_brewer(palette="Paired")
 ```
 
-    ## $age
-    ## [1] "integer"
-    ## 
-    ## $alb
-    ## [1] "numeric"
-    ## 
-    ## $alp
-    ## [1] "numeric"
-    ## 
-    ## $alt
-    ## [1] "numeric"
-    ## 
-    ## $ast
-    ## [1] "numeric"
-    ## 
-    ## $bil
-    ## [1] "numeric"
-    ## 
-    ## $che
-    ## [1] "numeric"
-    ## 
-    ## $chol
-    ## [1] "numeric"
-    ## 
-    ## $crea
-    ## [1] "numeric"
-    ## 
-    ## $ggt
-    ## [1] "numeric"
-    ## 
-    ## $prot
-    ## [1] "numeric"
+![](Hepatitis-C-Virus-K-Means-Clustering_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
-Let’s Explore
+``` r
+ggplot(gather(data, cols, value), aes(x = value, fill=cols)) + 
+  geom_boxplot() + 
+  facet_wrap(.~cols, scales = 'free') + 
+  theme_calc() +
+  scale_fill_brewer(palette="Paired") 
+```
 
-## Exploratory Data Analysis
+![](Hepatitis-C-Virus-K-Means-Clustering_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
+``` r
+ggplot(gather(data, cols, value), aes(x = value, fill=cols)) + 
+  geom_density() + 
+  facet_wrap(.~cols, scales = 'free') + 
+  theme_calc() +
+  scale_fill_brewer(palette="Paired") 
+```
+
+![](Hepatitis-C-Virus-K-Means-Clustering_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
 ## K-Means
 

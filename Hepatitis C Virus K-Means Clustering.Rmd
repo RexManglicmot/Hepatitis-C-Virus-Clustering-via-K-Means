@@ -35,6 +35,7 @@ All attributes except Category and Sex are numerical. The laboratory data are th
 ## Loading the Libraries
 ```{r, message=FALSE, warning=FALSE}
 library(tidyverse)
+library(ggthemes)
 
 ```
 
@@ -76,21 +77,38 @@ data <- data %>%
   drop_na()
 ```
 
-
-```{r}
-#check data for any NA's or characters
-summary(data)
-
-#check the class. We need quant variables
-lapply(data,class)
-```
 Let's Explore
 
 ## Exploratory Data Analysis
 ```{r}
-
+#show summary statistics of data
+summary(data)
 ```
 
+
+```{r}
+ggplot(gather(data, cols, value), aes(x = value, fill=cols)) + 
+       geom_histogram(binwidth = 1) + 
+  facet_wrap(.~cols, scales = 'free') + 
+  theme_calc() +
+  scale_fill_brewer(palette="Paired")
+```
+
+```{r}
+ggplot(gather(data, cols, value), aes(x = value, fill=cols)) + 
+  geom_boxplot() + 
+  facet_wrap(.~cols, scales = 'free') + 
+  theme_calc() +
+  scale_fill_brewer(palette="Paired") 
+```
+
+```{r}
+ggplot(gather(data, cols, value), aes(x = value, fill=cols)) + 
+  geom_density() + 
+  facet_wrap(.~cols, scales = 'free') + 
+  theme_calc() +
+  scale_fill_brewer(palette="Paired") 
+```
 
 
 ## K-Means
