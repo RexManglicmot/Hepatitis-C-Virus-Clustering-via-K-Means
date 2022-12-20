@@ -24,6 +24,8 @@ Rex Manglicmot
 
 ## Introduction
 
+Hepatitis C is bad.
+
 The target attribute for classification is Category (blood donors
 vs. Hepatitis C (including its progress (‘just’ Hepatitis C, Fibrosis,
 Cirrhosis).
