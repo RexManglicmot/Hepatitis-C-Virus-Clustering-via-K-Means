@@ -1,0 +1,113 @@
+---
+title: "Hepatitis C Virus K-Means Clustering"
+author: "Rex Manglicmot"
+output: 
+  github_document: 
+    toc: yes
+---
+
+## Status: Continuing Working Document
+
+
+## Introduction
+
+
+The target attribute for classification is Category (blood donors vs. Hepatitis C (including its progress ('just' Hepatitis C, Fibrosis, Cirrhosis).
+
+All attributes except Category and Sex are numerical. The laboratory data are the attributes 5-14.
+
+1) X (Patient ID/No.)
+2) Category (diagnosis) (values: '0=Blood Donor', '0s=suspect Blood Donor', '1=Hepatitis', '2=Fibrosis', '3=Cirrhosis')
+3) Age (in years)
+4) Sex (f,m)
+5) ALB
+6) ALP
+7) ALT
+8) AST
+9) BIL
+10) CHE
+11) CHOL
+12) CREA
+13) GGT
+14) PROT
+
+
+## Loading the Libraries
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+
+```
+
+
+
+## Loading the Data
+```{r}
+#laod data into an url object
+url <- ('https://archive.ics.uci.edu/ml/machine-learning-databases/00571/hcvdat0.csv')
+
+#put data into an object
+data_orig <- read.csv(url)
+
+#view strucuture
+str(data_orig)
+```
+
+## Cleaning the Data
+```{r}
+#make copy for cleaning
+data <- data_orig
+
+#view any NAs
+sum(is.na(data))
+
+#which rows have NAs
+which(is.na(data), arr.ind = TRUE)
+```
+
+
+```{r}
+#clean data all in one go
+data <- data %>%
+  #get rid of variables that are not needed for Kmeans via dplyr
+  select(-c(X, Category, Sex)) %>%
+  #rename columns to lower case
+  rename_all(tolower) %>%
+  #deletes NAs
+  drop_na()
+```
+
+
+```{r}
+#check data for any NA's or characters
+summary(data)
+
+#check the class. We need quant variables
+lapply(data,class)
+```
+Let's Explore
+
+## Exploratory Data Analysis
+```{r}
+
+```
+
+
+
+## K-Means
+
+
+
+```{r}
+
+```
+
+
+## Limitations
+
+
+
+
+## Conclusion
+
+
+## Inspirationn for this project
