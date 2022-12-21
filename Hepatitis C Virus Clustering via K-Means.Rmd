@@ -8,6 +8,9 @@ output:
 
 ## Status: Continuing Working Document
 
+Things to do/Questions:
+
+* why does the functions summary() and colMeans() have different outputs for the mean?
 
 ## Introduction
 
@@ -37,6 +40,8 @@ All attributes except Category and Sex are numerical. The laboratory data are th
 ```{r, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(ggthemes)
+library(stats)
+library(factoextra)
 
 ```
 
@@ -68,10 +73,14 @@ which(is.na(data), arr.ind = TRUE)
 
 
 ```{r}
+#create dataset to compare with Kmeans that has no NAs
+data_orig2 <- data_orig %>%
+  drop_na()
+
 #clean data all in one go
 data <- data %>%
   #get rid of variables that are not needed for Kmeans via dplyr
-  select(-c(X, Category, Sex)) %>%
+  select(-c(X, Category, Sex)) %>% # will try dataframe$column <- NULL next time
   #rename columns to lower case
   rename_all(tolower) %>%
   #deletes NAs
@@ -117,10 +126,66 @@ ggplot(gather(data, cols, value), aes(x = value, fill=cols)) +
 
 
 ```{r}
+#save the labels
+data_orig2.labels = data_orig2$Category
 
+#standardize all columns and store into new object
+data1 <- data %>%
+  mutate_all(~(scale(.) %>%
+  as.vector))
+
+#check of the mean is 0
+summary(data1)
+
+#colMeans(data1) --> this gives different output? why?
+
+#check if the sd is 1
+apply(data1, 2, sd)
+```
+
+```{r}
+# #kmeans and k=5 since there are 5 categories in the dataset
+# kresult <- kmeans(data1, 5)
+# 
+# print(kresult)
+```
+Insights:
+
+* 5 clusters
+* Means of each cluster in each feature
+
+```{r}
+# #let compare 
+# table(data_orig2$Category, kresult$cluster)
+```
+
+```{r}
+# calc disance between observations
+data_dist <-dist(data1)
+
+#calc how many clusters needed via an elbow plot
+#method is within Sum Sqaures (wss)
+fviz_nbclust(data1, kmeans, method = 'wss') +
+  labs(subtitle = 'Elbow Method')
+```
+
+We know that there are 5 clusters of groups. However, when we are looking at elbow plot (to find the optimal number), we need to look at diminishing returns and the slope is near zero. Here, it is difficult to tell, but I think from 4-5 looks good. Let's choose 5. 
+
+```{r}
+#kmeans with sclaed data, # of centers, and how many random sets to be chosen with nstart
+kmeans <-kmeans(data1, center=5, nstart=100)
+
+print(kmeans)
+```
+
+```{r}
+#plot this bad boy!
+kmeans_clusters <- kmeans$cluster
+rownames(data1) <- data_orig2$Category
 ```
 
 
+```{r}
 ## Limitations
 
 

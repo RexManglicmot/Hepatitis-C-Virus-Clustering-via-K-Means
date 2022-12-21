@@ -22,6 +22,11 @@ Rex Manglicmot
 
 ## Status: Continuing Working Document
 
+Things to do/Questions:
+
+-   why does the functions summary() and colMeans() have different
+    outputs for the mean?
+
 ## Introduction
 
 Hepatitis C is bad.
@@ -54,6 +59,7 @@ data are the attributes 5-14.
 ``` r
 library(tidyverse)
 library(ggthemes)
+library(stats)
 ```
 
 ## Loading the Data
@@ -136,10 +142,14 @@ which(is.na(data), arr.ind = TRUE)
     ## [31,] 591  14
 
 ``` r
+#create dataset to compare with Kmeans that has no NAs
+data_orig2 <- data_orig %>%
+  drop_na()
+
 #clean data all in one go
 data <- data %>%
   #get rid of variables that are not needed for Kmeans via dplyr
-  select(-c(X, Category, Sex)) %>%
+  select(-c(X, Category, Sex)) %>% # will try dataframe$column <- NULL next time
   #rename columns to lower case
   rename_all(tolower) %>%
   #deletes NAs
@@ -208,6 +218,116 @@ ggplot(gather(data, cols, value), aes(x = value, fill=cols)) +
 ![](Hepatitis-C-Virus-Clustering-via-K-Means_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
 ## K-Means
+
+``` r
+#standardize all columns and store into new object
+data1 <- data %>%
+  mutate_all(~(scale(.) %>%
+  as.vector))
+
+#check of the mean is 0
+summary(data1)
+```
+
+    ##       age                alb                alp                alt         
+    ##  Min.   :-2.45865   Min.   :-4.63819   Min.   :-2.19216   Min.   :-1.2307  
+    ##  1st Qu.:-0.84759   1st Qu.:-0.49017   1st Qu.:-0.60272   1st Qu.:-0.4877  
+    ##  Median :-0.04205   Median : 0.04785   Median :-0.07419   Median :-0.1858  
+    ##  Mean   : 0.00000   Mean   : 0.00000   Mean   : 0.00000   Mean   : 0.0000  
+    ##  3rd Qu.: 0.66279   3rd Qu.: 0.60324   3rd Qu.: 0.45434   3rd Qu.: 0.2552  
+    ##  Max.   : 2.97869   Max.   : 7.04220   Max.   :13.44377   Max.   :14.3183  
+    ##       ast                bil                 che                chol         
+    ##  Min.   :-0.70505   Min.   :-0.587029   Min.   :-3.09603   Min.   :-3.50886  
+    ##  1st Qu.:-0.37341   1st Qu.:-0.334251   1st Qu.:-0.58128   1st Qu.:-0.68324  
+    ##  Median :-0.24562   Median :-0.225097   Median : 0.02573   Median :-0.07205  
+    ##  Mean   : 0.00000   Mean   : 0.000000   Mean   : 0.00000   Mean   : 0.00000  
+    ##  3rd Qu.:-0.06307   3rd Qu.:-0.001044   3rd Qu.: 0.62361   3rd Qu.: 0.61000  
+    ##  Max.   : 8.83039   Max.   :11.373971   Max.   : 3.74537   Max.   : 3.78993  
+    ##       crea              ggt                prot         
+    ##  Min.   :-1.4531   Min.   :-0.62057   Min.   :-5.06464  
+    ##  1st Qu.:-0.2696   1st Qu.:-0.41616   1st Qu.:-0.48424  
+    ##  Median :-0.0921   Median :-0.28357   Median : 0.03923  
+    ##  Mean   : 0.0000   Mean   : 0.00000   Mean   : 0.00000  
+    ##  3rd Qu.: 0.1446   3rd Qu.:-0.01102   3rd Qu.: 0.61879  
+    ##  Max.   :19.6744   Max.   :11.28314   Max.   : 2.73138
+
+``` r
+#colMeans(data1) --> this gives different output? why?
+
+#check if the sd is 1
+apply(data1, 2, sd)
+```
+
+    ##  age  alb  alp  alt  ast  bil  che chol crea  ggt prot 
+    ##    1    1    1    1    1    1    1    1    1    1    1
+
+``` r
+#kmeans and k=5 since there are 5 categories in the dataset
+kresult <- kmeans(data1, 5)
+
+print(kresult)
+```
+
+    ## K-means clustering with 5 clusters of sizes 141, 157, 18, 183, 90
+    ## 
+    ## Cluster means:
+    ##          age         alb         alp         alt         ast         bil
+    ## 1  0.4614026  0.04797651  0.32401808  0.43426290 -0.12581808 -0.16279881
+    ## 2 -0.7225232 -0.25990635 -0.38687388 -0.26833532 -0.16031382 -0.13848351
+    ## 3  0.7411009 -1.73978425  1.73043339  0.30660995  3.44891191  3.46571855
+    ## 4 -0.3386264  0.75763539 -0.13290145  0.02506714 -0.03269172 -0.05500857
+    ## 5  1.0778578 -0.81433946  0.09139793 -0.32454098 -0.14653566 -0.08466469
+    ##          che        chol        crea         ggt       prot
+    ## 1  0.6398554  1.11407248 -0.03739967  0.10173072  0.2052373
+    ## 2 -0.5097129 -0.56396584 -0.14445118 -0.28321698 -0.2932382
+    ## 3 -2.1264420 -1.13301238  0.02044412  3.39060835 -0.6836604
+    ## 4  0.4268566 -0.08134348  0.01914888 -0.12297258  0.6768198
+    ## 5 -0.5559276 -0.36957227  0.26755499 -0.09339927 -1.0494689
+    ## 
+    ## Clustering vector:
+    ##   [1] 2 4 4 2 2 4 2 2 4 2 2 2 2 2 2 2 2 4 2 2 4 4 4 2 2 4 2 2 2 4 4 4 2 1 4 1 2
+    ##  [38] 4 4 2 4 4 2 4 2 1 2 4 4 4 4 4 4 2 4 4 2 4 4 2 4 2 4 4 1 4 2 4 4 4 4 1 4 4
+    ##  [75] 2 2 2 4 1 4 4 1 4 2 1 4 2 4 1 1 4 1 4 2 2 4 2 4 4 4 4 2 2 2 4 4 4 1 4 4 1
+    ## [112] 1 2 1 1 2 1 2 4 4 2 4 1 2 1 4 4 4 4 4 1 1 4 1 2 4 4 1 4 1 1 1 2 1 4 1 4 5
+    ## [149] 2 2 2 4 1 4 2 4 4 1 4 1 4 4 4 2 2 1 4 4 4 2 2 4 4 1 4 1 1 2 5 2 4 1 4 1 4
+    ## [186] 2 5 5 1 4 2 4 4 1 4 1 1 2 2 1 2 4 1 1 1 5 5 1 4 4 4 4 4 1 1 4 5 1 4 5 4 5
+    ## [223] 1 1 4 1 1 2 4 5 1 1 5 1 1 4 4 1 1 5 1 1 1 1 5 1 4 5 4 5 1 1 4 5 1 4 4 4 4
+    ## [260] 1 5 4 1 4 5 1 4 4 5 5 5 4 4 5 1 5 5 5 1 1 4 5 1 1 5 5 4 5 1 5 4 5 1 5 5 1
+    ## [297] 5 5 1 1 5 1 4 1 1 1 1 1 5 1 5 5 5 1 5 5 5 2 2 2 2 2 2 2 2 2 4 4 2 2 2 2 2
+    ## [334] 2 2 2 4 4 2 4 2 4 2 4 2 2 4 4 4 4 4 4 2 2 2 2 2 4 4 2 2 2 2 4 2 2 4 4 2 4
+    ## [371] 2 2 2 2 4 2 2 4 2 1 2 2 4 2 2 2 4 2 2 4 1 4 2 2 2 2 2 2 4 4 2 2 4 4 2 2 2
+    ## [408] 2 4 2 2 1 2 1 4 2 2 2 2 2 2 1 5 4 2 5 1 4 2 1 2 5 1 1 1 2 2 5 4 4 1 1 1 1
+    ## [445] 2 5 4 5 2 1 5 1 1 1 2 2 1 4 1 4 5 4 1 4 1 1 1 2 1 1 1 1 1 5 4 4 2 5 4 5 1
+    ## [482] 4 5 5 1 5 1 5 5 5 5 5 1 1 5 5 5 1 1 4 1 5 5 1 1 1 1 5 5 4 1 1 5 1 5 1 1 5
+    ## [519] 1 5 5 1 1 5 1 5 3 5 5 1 5 5 3 2 2 2 4 4 4 4 4 2 1 4 4 1 4 3 3 2 2 2 4 2 4
+    ## [556] 2 4 4 4 5 5 4 2 4 5 5 3 3 2 5 3 5 3 3 3 3 5 3 3 3 5 3 5 4 2 3 3 5 3
+    ## 
+    ## Within cluster sum of squares by cluster:
+    ## [1]  736.5218  601.9438 1120.6526  854.9991 1136.3629
+    ##  (between_SS / total_SS =  31.2 %)
+    ## 
+    ## Available components:
+    ## 
+    ## [1] "cluster"      "centers"      "totss"        "withinss"     "tot.withinss"
+    ## [6] "betweenss"    "size"         "iter"         "ifault"
+
+Insights:
+
+-   5 clusters
+-   Means of each cluster in each feature
+
+``` r
+#let compare 
+table(data_orig2$Category, kresult$cluster)
+```
+
+    ##                         
+    ##                            1   2   3   4   5
+    ##   0=Blood Donor          138 145   0 167  76
+    ##   0s=suspect Blood Donor   1   0   2   0   4
+    ##   1=Hepatitis              2   7   2   9   0
+    ##   2=Fibrosis               0   3   0   6   3
+    ##   3=Cirrhosis              0   2  14   1   7
 
 ## Limitations
 
