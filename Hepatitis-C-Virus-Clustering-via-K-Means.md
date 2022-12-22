@@ -33,7 +33,7 @@ Things to do/Questions:
 
 <img
 src="https://cdn.britannica.com/65/190365-050-16332CCA/Human-blood-use-transfusion.jpg"
-style="width:65.0%" />
+style="width:50.0%" />
 
 </center>
 
