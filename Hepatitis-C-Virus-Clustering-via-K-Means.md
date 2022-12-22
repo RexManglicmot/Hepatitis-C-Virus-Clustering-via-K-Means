@@ -29,7 +29,23 @@ Things to do/Questions:
 
 ## Introduction
 
-Hepatitis C is bad.
+<center>
+
+<img
+src="https://cdn.britannica.com/65/190365-050-16332CCA/Human-blood-use-transfusion.jpg"
+style="width:65.0%" />
+
+</center>
+
+Blood is very important as it is used for in medical procedures.
+Patients will need blood for surgical procedures (i.e., heart transplant
+or car crash trauma), or if someone has an underlying blood-related
+disease (i.e., anemia). As such, Twenty-one million of blood components
+are transfused in the US/year.[^1]
+
+Organizations like the American Red Cross have championed the notion for
+people to donate their blood[^2]. It is therefore important to classify
+which blood is suitable for transfusion.
 
 The target attribute for classification is Category (blood donors
 vs. Hepatitis C (including its progress (‘just’ Hepatitis C, Fibrosis,
@@ -60,6 +76,7 @@ data are the attributes 5-14.
 library(tidyverse)
 library(ggthemes)
 library(stats)
+library(factoextra)
 ```
 
 ## Loading the Data
@@ -220,6 +237,9 @@ ggplot(gather(data, cols, value), aes(x = value, fill=cols)) +
 ## K-Means
 
 ``` r
+#save the labels
+data_orig2.labels = data_orig2$Category
+
 #standardize all columns and store into new object
 data1 <- data %>%
   mutate_all(~(scale(.) %>%
@@ -262,54 +282,11 @@ apply(data1, 2, sd)
     ##    1    1    1    1    1    1    1    1    1    1    1
 
 ``` r
-#kmeans and k=5 since there are 5 categories in the dataset
-kresult <- kmeans(data1, 5)
-
-print(kresult)
+# #kmeans and k=5 since there are 5 categories in the dataset
+# kresult <- kmeans(data1, 5)
+# 
+# print(kresult)
 ```
-
-    ## K-means clustering with 5 clusters of sizes 141, 157, 18, 183, 90
-    ## 
-    ## Cluster means:
-    ##          age         alb         alp         alt         ast         bil
-    ## 1  0.4614026  0.04797651  0.32401808  0.43426290 -0.12581808 -0.16279881
-    ## 2 -0.7225232 -0.25990635 -0.38687388 -0.26833532 -0.16031382 -0.13848351
-    ## 3  0.7411009 -1.73978425  1.73043339  0.30660995  3.44891191  3.46571855
-    ## 4 -0.3386264  0.75763539 -0.13290145  0.02506714 -0.03269172 -0.05500857
-    ## 5  1.0778578 -0.81433946  0.09139793 -0.32454098 -0.14653566 -0.08466469
-    ##          che        chol        crea         ggt       prot
-    ## 1  0.6398554  1.11407248 -0.03739967  0.10173072  0.2052373
-    ## 2 -0.5097129 -0.56396584 -0.14445118 -0.28321698 -0.2932382
-    ## 3 -2.1264420 -1.13301238  0.02044412  3.39060835 -0.6836604
-    ## 4  0.4268566 -0.08134348  0.01914888 -0.12297258  0.6768198
-    ## 5 -0.5559276 -0.36957227  0.26755499 -0.09339927 -1.0494689
-    ## 
-    ## Clustering vector:
-    ##   [1] 2 4 4 2 2 4 2 2 4 2 2 2 2 2 2 2 2 4 2 2 4 4 4 2 2 4 2 2 2 4 4 4 2 1 4 1 2
-    ##  [38] 4 4 2 4 4 2 4 2 1 2 4 4 4 4 4 4 2 4 4 2 4 4 2 4 2 4 4 1 4 2 4 4 4 4 1 4 4
-    ##  [75] 2 2 2 4 1 4 4 1 4 2 1 4 2 4 1 1 4 1 4 2 2 4 2 4 4 4 4 2 2 2 4 4 4 1 4 4 1
-    ## [112] 1 2 1 1 2 1 2 4 4 2 4 1 2 1 4 4 4 4 4 1 1 4 1 2 4 4 1 4 1 1 1 2 1 4 1 4 5
-    ## [149] 2 2 2 4 1 4 2 4 4 1 4 1 4 4 4 2 2 1 4 4 4 2 2 4 4 1 4 1 1 2 5 2 4 1 4 1 4
-    ## [186] 2 5 5 1 4 2 4 4 1 4 1 1 2 2 1 2 4 1 1 1 5 5 1 4 4 4 4 4 1 1 4 5 1 4 5 4 5
-    ## [223] 1 1 4 1 1 2 4 5 1 1 5 1 1 4 4 1 1 5 1 1 1 1 5 1 4 5 4 5 1 1 4 5 1 4 4 4 4
-    ## [260] 1 5 4 1 4 5 1 4 4 5 5 5 4 4 5 1 5 5 5 1 1 4 5 1 1 5 5 4 5 1 5 4 5 1 5 5 1
-    ## [297] 5 5 1 1 5 1 4 1 1 1 1 1 5 1 5 5 5 1 5 5 5 2 2 2 2 2 2 2 2 2 4 4 2 2 2 2 2
-    ## [334] 2 2 2 4 4 2 4 2 4 2 4 2 2 4 4 4 4 4 4 2 2 2 2 2 4 4 2 2 2 2 4 2 2 4 4 2 4
-    ## [371] 2 2 2 2 4 2 2 4 2 1 2 2 4 2 2 2 4 2 2 4 1 4 2 2 2 2 2 2 4 4 2 2 4 4 2 2 2
-    ## [408] 2 4 2 2 1 2 1 4 2 2 2 2 2 2 1 5 4 2 5 1 4 2 1 2 5 1 1 1 2 2 5 4 4 1 1 1 1
-    ## [445] 2 5 4 5 2 1 5 1 1 1 2 2 1 4 1 4 5 4 1 4 1 1 1 2 1 1 1 1 1 5 4 4 2 5 4 5 1
-    ## [482] 4 5 5 1 5 1 5 5 5 5 5 1 1 5 5 5 1 1 4 1 5 5 1 1 1 1 5 5 4 1 1 5 1 5 1 1 5
-    ## [519] 1 5 5 1 1 5 1 5 3 5 5 1 5 5 3 2 2 2 4 4 4 4 4 2 1 4 4 1 4 3 3 2 2 2 4 2 4
-    ## [556] 2 4 4 4 5 5 4 2 4 5 5 3 3 2 5 3 5 3 3 3 3 5 3 3 3 5 3 5 4 2 3 3 5 3
-    ## 
-    ## Within cluster sum of squares by cluster:
-    ## [1]  736.5218  601.9438 1120.6526  854.9991 1136.3629
-    ##  (between_SS / total_SS =  31.2 %)
-    ## 
-    ## Available components:
-    ## 
-    ## [1] "cluster"      "centers"      "totss"        "withinss"     "tot.withinss"
-    ## [6] "betweenss"    "size"         "iter"         "ifault"
 
 Insights:
 
@@ -317,20 +294,89 @@ Insights:
 -   Means of each cluster in each feature
 
 ``` r
-#let compare 
-table(data_orig2$Category, kresult$cluster)
+# #let compare 
+# table(data_orig2$Category, kresult$cluster)
 ```
 
-    ##                         
-    ##                            1   2   3   4   5
-    ##   0=Blood Donor          138 145   0 167  76
-    ##   0s=suspect Blood Donor   1   0   2   0   4
-    ##   1=Hepatitis              2   7   2   9   0
-    ##   2=Fibrosis               0   3   0   6   3
-    ##   3=Cirrhosis              0   2  14   1   7
+``` r
+# calc disance between observations
+data_dist <-dist(data1)
+
+#calc how many clusters needed via an elbow plot
+#method is within Sum Sqaures (wss)
+fviz_nbclust(data1, kmeans, method = 'wss') +
+  labs(subtitle = 'Elbow Method')
+```
+
+![](Hepatitis-C-Virus-Clustering-via-K-Means_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+
+We know that there are 5 clusters of groups. However, when we are
+looking at elbow plot (to find the optimal number), we need to look at
+diminishing returns and the slope is near zero. Here, it is difficult to
+tell, but I think from 4-5 looks good. Let’s choose 5.
+
+``` r
+#kmeans with sclaed data, # of centers, and how many random sets to be chosen with nstart
+kmeans <-kmeans(data1, center=5, nstart=100)
+
+print(kmeans)
+```
+
+    ## K-means clustering with 5 clusters of sizes 207, 166, 195, 18, 3
+    ## 
+    ## Cluster means:
+    ##          age        alb        alp        alt         ast         bil
+    ## 1  0.3130408  0.4469508  0.2368245  0.3415397 -0.06828557 -0.12776574
+    ## 2  0.6178989 -0.6952008 -0.1370316 -0.3118183 -0.19199226 -0.14089528
+    ## 3 -0.9224589  0.2983096 -0.3407192 -0.1078580 -0.08083939 -0.06255888
+    ## 4  0.7411009 -1.7397842  1.7304334  0.3066099  3.44891191  3.46571855
+    ## 5 -0.2770011 -1.3232473  3.0056722 -1.1411867 -0.10363532 -0.11594278
+    ##           che       chol        crea         ggt       prot
+    ## 1  0.67641171  0.7659706 -0.01244523  0.07515759  0.4956910
+    ## 2 -0.48697918 -0.2216181 -0.14695991 -0.22105638 -0.8064575
+    ## 3 -0.09094829 -0.5042631 -0.04959325 -0.22690613  0.2527441
+    ## 4 -2.12644196 -1.1330124  0.02044412  3.39060835 -0.6836604
+    ## 5 -1.05593636 -1.0139248 12.09139932  1.45116087 -1.9050992
+    ## 
+    ## Clustering vector:
+    ##   [1] 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 2 3 3 3 3 3 3 3 1 3
+    ##  [38] 3 1 3 3 1 3 3 3 1 3 1 3 3 3 3 3 2 1 1 3 1 3 2 1 3 3 3 3 3 3 3 3 3 3 1 3 1
+    ##  [75] 3 3 3 1 1 3 3 1 1 2 1 3 3 3 1 1 3 1 1 3 3 1 3 3 1 3 1 2 3 3 1 1 3 1 1 1 1
+    ## [112] 1 3 1 1 2 1 2 1 1 3 3 1 3 1 3 3 3 1 3 2 2 1 1 2 3 3 1 1 1 1 1 2 1 3 1 3 2
+    ## [149] 2 2 2 3 1 3 3 1 3 1 1 1 3 1 1 2 3 1 3 1 3 3 2 1 1 1 1 2 1 3 2 2 1 1 1 1 1
+    ## [186] 2 2 2 1 3 2 3 1 1 1 1 1 2 2 1 2 1 1 1 1 2 2 1 1 3 1 1 3 1 1 1 2 1 1 2 1 2
+    ## [223] 1 1 2 1 1 2 3 2 1 1 2 2 1 1 1 1 1 2 1 1 1 1 2 1 1 2 2 2 2 1 1 2 1 2 3 1 1
+    ## [260] 1 2 1 1 1 2 2 1 1 2 2 2 1 1 2 1 2 2 2 1 1 1 2 1 1 2 2 1 2 1 2 1 2 1 2 2 1
+    ## [297] 2 2 1 1 2 1 1 1 2 1 1 1 2 1 2 2 2 1 2 2 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+    ## [334] 3 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 1 3 3 3 3 2 3 3 3 3 3 3 1
+    ## [371] 3 3 3 2 3 3 2 3 3 1 3 2 3 2 3 2 1 2 3 1 2 1 2 2 2 3 2 2 1 3 2 2 3 1 2 2 2
+    ## [408] 2 1 2 3 1 2 1 1 2 2 2 2 2 2 1 2 1 3 2 1 3 2 1 3 2 1 1 1 3 2 2 1 1 2 1 1 1
+    ## [445] 2 2 1 2 2 2 2 1 1 1 3 2 1 1 1 2 2 3 1 1 1 1 1 2 1 1 1 2 1 2 1 1 2 2 2 2 1
+    ## [482] 1 2 2 1 2 1 2 2 2 2 2 1 1 2 2 2 2 1 2 1 2 2 1 1 1 1 2 2 1 1 1 2 1 2 2 2 2
+    ## [519] 1 2 2 2 1 2 1 2 4 2 2 1 2 2 4 3 3 3 3 3 3 3 3 3 1 3 1 1 1 4 4 3 3 2 1 3 3
+    ## [556] 3 3 1 3 2 2 3 3 1 2 5 4 4 2 5 4 2 4 4 4 4 2 4 4 4 2 4 5 3 2 4 4 2 4
+    ## 
+    ## Within cluster sum of squares by cluster:
+    ## [1] 1149.83687  895.53301  841.88973 1120.65260   97.34147
+    ##  (between_SS / total_SS =  36.5 %)
+    ## 
+    ## Available components:
+    ## 
+    ## [1] "cluster"      "centers"      "totss"        "withinss"     "tot.withinss"
+    ## [6] "betweenss"    "size"         "iter"         "ifault"
+
+``` r
+#plot this bad boy!
+# kmeans_clusters <- kmeans$cluster
+# rownames(data1) <- data_orig2$Category
+```
 
 ## Limitations
 
 ## Conclusion
 
 ## Inspirationn for this project
+
+[^1]: <https://www.redcrossblood.org/donate-blood/blood-donation-process/what-happens-to-donated-blood/blood-transfusions/reasons-transfusions.html#>:\~:text=Blood%20transfusions%20are%20a%20very,in%20the%20United%20States%20alone.
+
+[^2]: <https://www.redcrossblood.org/>

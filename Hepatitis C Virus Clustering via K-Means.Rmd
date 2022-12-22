@@ -13,8 +13,14 @@ Things to do/Questions:
 * why does the functions summary() and colMeans() have different outputs for the mean?
 
 ## Introduction
+<center>
+![](https://cdn.britannica.com/65/190365-050-16332CCA/Human-blood-use-transfusion.jpg){width=65%}
 
-Hepatitis C is bad. 
+</center>
+Blood is very important as it is used for in medical procedures. Patients will need blood for surgical procedures (i.e., heart transplant or car crash trauma), or if someone has an underlying blood-related disease (i.e., anemia). As such, Twenty-one million of blood components are transfused in the US/year.^[https://www.redcrossblood.org/donate-blood/blood-donation-process/what-happens-to-donated-blood/blood-transfusions/reasons-transfusions.html#:~:text=Blood%20transfusions%20are%20a%20very,in%20the%20United%20States%20alone.] 
+
+Organizations like the American Red Cross have championed the notion for people to donate their blood^[https://www.redcrossblood.org/]. It is therefore important to classify which blood is suitable for transfusion. 
+
 
 The target attribute for classification is Category (blood donors vs. Hepatitis C (including its progress ('just' Hepatitis C, Fibrosis, Cirrhosis).
 
@@ -180,12 +186,12 @@ print(kmeans)
 
 ```{r}
 #plot this bad boy!
-kmeans_clusters <- kmeans$cluster
-rownames(data1) <- data_orig2$Category
+# kmeans_clusters <- kmeans$cluster
+# rownames(data1) <- data_orig2$Category
 ```
 
 
-```{r}
+
 ## Limitations
 
 
