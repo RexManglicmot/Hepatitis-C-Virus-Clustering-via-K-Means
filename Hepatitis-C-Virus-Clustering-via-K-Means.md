@@ -33,7 +33,7 @@ Things to do/Questions:
 
 <img
 src="https://cdn.britannica.com/65/190365-050-16332CCA/Human-blood-use-transfusion.jpg"
-style="width:50.0%" />
+style="width:40.0%" />
 
 </center>
 
@@ -44,31 +44,42 @@ disease (i.e., anemia). As such, Twenty-one million of blood components
 are transfused in the US/year.[^1]
 
 Organizations like the American Red Cross have championed the notion for
-people to donate their blood[^2]. It is therefore important to classify
-which blood is suitable for transfusion.
+people to donate their blood.[^2] It is therefore important to classify
+which blood is suitable for transfusion. Identifying Hepatitis C blood
+is important as it may cause the donor to contract the disease.
 
-The target attribute for classification is Category (blood donors
-vs. Hepatitis C (including its progress (‘just’ Hepatitis C, Fibrosis,
-Cirrhosis).
+A special acknowledgement to the University of Irvine’s Data Repository
+for hosting a wide range of datasets for the public.[^3] Further,
+special acknowledgement to the investigators in creating this dataset;
+Ralf Lichtinghagen from the Institute of Clinical Chemistry; Medical
+University Hannover from Hannover, Germany, Frank Klawonn from Helmholtz
+Centre for Infection Research in Braunschweig, Germany, and Georg
+Hoffmann from Trillium GmbH in Grafrath, Germany.
+
+Within the dataset, the target attribute for classification is Category
+(blood donors vs. Hepatitis C (including its progress (‘just’ Hepatitis
+C, Fibrosis, Cirrhosis).
 
 All attributes except Category and Sex are numerical. The laboratory
 data are the attributes 5-14.
 
-1)  X (Patient ID/No.)
-2)  Category (diagnosis) (values: ‘0=Blood Donor’, ‘0s=suspect Blood
+The atrributes are as follows:
+
+1.  X (Patient ID/No.)
+2.  Category (diagnosis) (values: ‘0=Blood Donor’, ‘0s=suspect Blood
     Donor’, ‘1=Hepatitis’, ‘2=Fibrosis’, ‘3=Cirrhosis’)
-3)  Age (in years)
-4)  Sex (f,m)
-5)  ALB
-6)  ALP
-7)  ALT
-8)  AST
-9)  BIL
-10) CHE
-11) CHOL
-12) CREA
-13) GGT
-14) PROT
+3.  Age (in years)
+4.  Sex (f,m)
+5.  ALB
+6.  ALP
+7.  ALT
+8.  AST
+9.  BIL
+10. CHE
+11. CHOL
+12. CREA
+13. GGT
+14. PROT
 
 ## Loading the Libraries
 
@@ -236,6 +247,16 @@ ggplot(gather(data, cols, value), aes(x = value, fill=cols)) +
 
 ## K-Means
 
+<center>
+
+![](https://miro.medium.com/max/1400/0*irrlUXS1tmYanvT0.webp)
+
+</center>
+
+K-means is a type of unsupervised learning in which observations are
+formed into clusters based on k-clusters. These clusters are based
+similarities and differences of the entire dataset.
+
 ``` r
 #save the labels
 data_orig2.labels = data_orig2$Category
@@ -380,3 +401,5 @@ print(kmeans)
 [^1]: <https://www.redcrossblood.org/donate-blood/blood-donation-process/what-happens-to-donated-blood/blood-transfusions/reasons-transfusions.html#>:\~:text=Blood%20transfusions%20are%20a%20very,in%20the%20United%20States%20alone.
 
 [^2]: <https://www.redcrossblood.org/>
+
+[^3]: <https://archive.ics.uci.edu/ml/datasets/HCV+data>
