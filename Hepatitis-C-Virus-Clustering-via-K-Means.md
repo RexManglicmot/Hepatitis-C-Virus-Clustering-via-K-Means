@@ -17,6 +17,8 @@ Rex Manglicmot
 -   <a href="#k-means" id="toc-k-means">K-Means</a>
 -   <a href="#limitations" id="toc-limitations">Limitations</a>
 -   <a href="#conclusion" id="toc-conclusion">Conclusion</a>
+-   <a href="#k-means-references" id="toc-k-means-references">K-Means
+    References</a>
 -   <a href="#inspirationn-for-this-project"
     id="toc-inspirationn-for-this-project">Inspirationn for this project</a>
 
@@ -254,8 +256,13 @@ ggplot(gather(data, cols, value), aes(x = value, fill=cols)) +
 </center>
 
 K-means is a type of unsupervised learning in which observations are
-formed into clusters based on k-clusters. These clusters are based
+formed into clusters based on k-clusters. If we define K=2 or K=3, there
+will be 2 and 3 clusters, respectively. As such, K-means helps us
+categorize a dataset without preconceived labels and allow us to uncover
+new grouping categories within the dataset. These clusters are based
 similarities and differences of the entire dataset.
+
+The K-means algorithmn sets K as centroids which is used to
 
 ``` r
 #save the labels
@@ -395,6 +402,13 @@ print(kmeans)
 ## Limitations
 
 ## Conclusion
+
+## K-Means References
+
+References:
+
+1.  <https://stanford.edu/~cpiech/cs221/handouts/kmeans.html>
+    2.https://www.javatpoint.com/k-means-clustering-algorithm-in-machine-learning
 
 ## Inspirationn for this project
 
